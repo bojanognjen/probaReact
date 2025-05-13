@@ -81,8 +81,7 @@ const thirdList = [
   }
 ];
 
-function App() {
-  return (
+const App = () => (
     <div>
       <h1>My hacker stories</h1>
 
@@ -95,20 +94,17 @@ function App() {
       <List list={thirdList}/>
     </div>
   );
-}
 
-function List({list}) {
-  return (
+const List = ({list}) => (
     <ul>
         {list.map((item) => (
           <Item item={item}/>
         ))}
     </ul>
   );
-}
 
-function Item({ item }) {
-  return (
+
+const Item = ({ item }) => (
     <li>
       <span>
         <a href={item.url}>{item.title}</a>
@@ -118,15 +114,13 @@ function Item({ item }) {
       <span>{item.points}</span>
     </li>
   );
-}
 
-function Search() {
-  return (
+const Search = () => (
     <div>
       <label htmlFor="search">Search: </label>
       <input id="search" type="text" />
     </div>
   );
-}
+
 
 export default App;
