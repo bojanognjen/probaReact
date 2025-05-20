@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const App = () => {
+  console.log('App rendered')
   const stories = [
     {
       title: "React",
@@ -25,18 +26,22 @@ const App = () => {
       num_comments: 5,
       points: 2,
       objectID: 2,
-    }
+    },
   ];
+
+  const handleSearch = (event) => {
+    console.log(event.target.value);
+    };
 
   return (
     <div>
       <h1>My hacker stories</h1>
 
-      <Search />
+      <Search onSearch={handleSearch}/>
 
       <hr />
 
-      <List list={stories}/>
+      <List list={stories} />
       <hr />
 
       <Counter />
@@ -46,78 +51,81 @@ const App = () => {
       <TextHandler />
     </div>
   );
+};
+
+const List = (props) => {
+  console.log('List rendered')
+  return(
+  <ul>
+    {props.list.map((item) => (
+      <Item key={item.objectID} item={item} />
+    ))}
+  </ul>
+);
 }
 
-const List = (props) => (
-    <ul>
-        {props.list.map((item) => (
-          <Item key={item.objectID} item={item}/>
-        ))}
-    </ul>
-  );
-
-
 const Item = (props) => (
-    <li>
-      <span>
-        <a href={props.item.url}>{props.item.title}</a>
-      </span>
-      <span>{props.item.author}</span>
-      <span>{props.item.num_comments}</span>
-      <span>{props.item.points}</span>
-    </li>
-  );
+  <li>
+    <span>
+      <a href={props.item.url}>{props.item.title}</a>
+    </span>
+    <span>{props.item.author}</span>
+    <span>{props.item.num_comments}</span>
+    <span>{props.item.points}</span>
+  </li>
+);
 
-const Search = () => {
+const Search = (props) => {
+  console.log('Search rendered')
+  let [searchTerm, setSearchTerm] = useState('')
   const handleChange = (event) => {
-    console.log(event)
-
-    console.log(event.target.value)
-  }
-  
+    setSearchTerm(event.target.value)
+    props.onSearch(event);
+  };
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange}/>
+      <input id="search" type="text" onChange={handleChange} />
+      <p>
+        Searching for <strong>{searchTerm}</strong>
+      </p>
     </div>
   );
-}
+};
 
 const Counter = () => {
-  const [count, setCount] = useState(0)
+  console.log('Counter rendered')
+  const [count, setCount] = useState(0);
   const handleClick = () => {
-    setCount(count + 1)
-  }
+    setCount(count + 1);
+  };
 
   return (
     <div>
       <span>Count: {count}</span>
-      <button onClick={handleClick}>
-        Increase count
-      </button>
+      <button onClick={handleClick}>Increase count</button>
     </div>
-  )
-}
+  );
+};
 
-const other = () => console.log("Some other activity happened.")
+const other = () => console.log("Some other activity happened.");
 
-  const TextHandler = () => {
-    const [text, setText] = useState('')
+const TextHandler = () => {
+  console.log('Text Handler rendered')
+  const [text, setText] = useState("");
 
-    const handleChange = (event) => {
-      setText(event.target.value)
-    }
+  const handleChange = (event) => {
+    setText(event.target.value);
+  };
 
-    return(
-      <div>
-        <input type="text" value={text} onChange={handleChange} onBlur={other}/>
+  return (
+    <div>
+      <input type="text" value={text} onChange={handleChange} onBlur={other} />
 
-        {text}
-      </div>
-    )
-  }
-
-
+      {text}
+    </div>
+  );
+};
 
 export default App;
 
