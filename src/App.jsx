@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const App = () => {
   console.log('App rendered')
@@ -28,20 +28,30 @@ const App = () => {
       objectID: 2,
     },
   ];
+  
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem('search') ?? 'React'
+  )
+
+  const searchedStories = stories.filter((story)=>  story.title.toLocaleLowerCase().includes(searchTerm.toLowerCase()))
+  
+  useEffect(()=> {
+    localStorage.setItem('search', searchTerm)
+  }, [searchTerm])
 
   const handleSearch = (event) => {
-    console.log(event.target.value);
+    setSearchTerm(event.target.value)
     };
 
   return (
     <div>
       <h1>My hacker stories</h1>
 
-      <Search onSearch={handleSearch}/>
+      <Search search={searchTerm} onSearch={handleSearch}/>
 
       <hr />
 
-      <List list={stories} />
+      <List list={searchedStories} />
       <hr />
 
       <Counter />
@@ -53,45 +63,46 @@ const App = () => {
   );
 };
 
-const List = (props) => {
-  console.log('List rendered')
-  return(
+const List = ({list}) => (
   <ul>
-    {props.list.map((item) => (
-      <Item key={item.objectID} item={item} />
+    {list.map((item) => (
+      <Item key={item.objectID} 
+          item={item}
+          />
     ))}
   </ul>
 );
-}
 
-const Item = (props) => (
+
+const Item = ({item}) => (
   <li>
     <span>
-      <a href={props.item.url}>{props.item.title}</a>
+      <a href={item.url}>{item.title}</a>
     </span>
-    <span>{props.item.author}</span>
-    <span>{props.item.num_comments}</span>
-    <span>{props.item.points}</span>
+    <span>{item.author}</span>
+    <span>{item.num_comments}</span>
+    <span>{item.points}</span>
   </li>
 );
 
-const Search = (props) => {
+const Search = ({search, onSearch}) => {
   console.log('Search rendered')
-  let [searchTerm, setSearchTerm] = useState('')
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value)
-    props.onSearch(event);
-  };
+
   return (
     <div>
-      <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange} />
-      <p>
-        Searching for <strong>{searchTerm}</strong>
-      </p>
+      <InputWithLabel id={search} value={search} onInputChange={onSearch}/>
     </div>
   );
 };
+
+const InputWithLabel = ({id, type = 'text', value, onInputChange}) => {
+  return(
+    <>
+      <label htmlFor={id}>Search: </label>
+      <input id={id} type={type} value={value} onChange={onInputChange} />
+    </>
+  )
+}
 
 const Counter = () => {
   console.log('Counter rendered')
