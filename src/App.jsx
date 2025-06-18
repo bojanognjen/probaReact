@@ -90,15 +90,15 @@ const Search = ({search, onSearch}) => {
 
   return (
     <div>
-      <InputWithLabel id={search} value={search} onInputChange={onSearch}/>
+      <InputWithLabel id={search} value={search} onInputChange={onSearch} children="Search: "/>
     </div>
   );
 };
 
-const InputWithLabel = ({id, type = 'text', value, onInputChange}) => {
+const InputWithLabel = ({id, type = 'text', value, onInputChange, children}) => {
   return(
     <>
-      <label htmlFor={id}>Search: </label>
+      <label htmlFor={id}>{children}</label>
       <input id={id} type={type} value={value} onChange={onInputChange} />
     </>
   )
